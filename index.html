@@ -134,21 +134,21 @@
     stage.textContent=stageLabels[h.stage]||'Partida';
     if(h.stage==='cut')desc.textContent=h.cutter===g.me?'Você é o cortador. Escolha a posição do corte abaixo.':'Aguardando '+(g.seats[h.cutter]?.name||'jogador')+' cortar o baralho.';
     else if(h.stage==='decide')desc.textContent='O time com 11 pontos precisa decidir se joga a mão valendo 3 ou recua.';
-    else if(h.pending)desc.textContent='Pedido de aumento para '+h.pend.value+' pontos. Aguardando resposta.';
+    else if(h.pend)desc.textContent='Pedido de aumento para '+h.pend.value+' pontos. Aguardando resposta.';
     else if(h.stage==='play')desc.textContent=h.turn===g.me?'É sua vez! Escolha uma carta.':'Aguardando '+(g.seats[h.turn]?.name||'jogador')+' jogar.';
     else if(h.stage==='ended')desc.textContent=h.res||'Mão encerrada.';
     else desc.textContent='Aguarde a conclusão da jogada.';
     $('tableCards').innerHTML='';
     if(h.vira){$('tableCards').append(makePlayedCard(h.vira,'VIRA'));}
     h.table.forEach(t=>{$('tableCards').append(makePlayedCard(t.card,t.cov?'Escondida':g.seats[t.seat]?.name||'Jogador'));});
-    $('myHand').innerHTML='';const my=h.my||[];const canPlay=h.stage==='play'&&h.turn===g.me&&!h.pending;
+    $('myHand').innerHTML='';const my=h.my||[];const canPlay=h.stage==='play'&&h.turn===g.me&&!h.pend;
     my.forEach((c,i)=>{const b=document.createElement('button');b.type='button';b.disabled=!canPlay;const card=c?cardElement(c):cardBack(i);b.append(card);const label=document.createElement('span');label.className='card-label';label.textContent=c?(canPlay?'Jogar':'Carta '+(i+1)):'Carta '+(i+1)+' · às cegas';b.append(label);b.addEventListener('click',()=>send({t:'play',i,cov:state.cover}));$('myHand').append(b);});
     $('playControls').innerHTML='';$('actionNotice').classList.add('hidden');
     if(h.stage==='cut'&&h.cutter===g.me){const wrap=document.createElement('div');wrap.className='row';const range=document.createElement('input');range.type='range';range.min='1';range.max='39';range.value='20';range.style.width='150px';const val=document.createElement('span');val.textContent='20';range.addEventListener('input',()=>val.textContent=range.value);const b=document.createElement('button');b.className='primary';b.textContent='Confirmar corte';b.onclick=()=>send({t:'cut',pos:+range.value});wrap.append(range,val,b);$('playControls').append(wrap);}
     if(h.stage==='decide'&&g.me>=0&&((g.team&&g.me%2===h.onze)||(!g.team&&g.me===h.onze))){addAction('Jogar valendo 3','primary',()=>send({t:'decide',play:true}));addAction('Recuar','danger',()=>send({t:'decide',play:false}));}
-    if(h.stage==='play'&&h.turn===g.me&&!h.pending&&h.kind!=='ferro'&&h.vazas.length>0){const b=document.createElement('button');b.className=state.cover?'gold':'muted';b.textContent=state.cover?'Carta escondida: ligada':'Carta escondida: desligada';b.onclick=()=>{state.cover=!state.cover;renderGame(s)};$('playControls').append(b);}
+    if(h.stage==='play'&&h.turn===g.me&&!h.pend&&h.kind!=='ferro'&&h.vazas.length>0){const b=document.createElement('button');b.className=state.cover?'gold':'muted';b.textContent=state.cover?'Carta escondida: ligada':'Carta escondida: desligada';b.onclick=()=>{state.cover=!state.cover;renderGame(s)};$('playControls').append(b);}
     if(h.can){addAction('Pedir truco / aumentar','gold',()=>send({t:'raise'}));}
-    if(h.pending&&h.pend.who===g.me){const n=document.createElement('div');n.className='notice';n.textContent='Você precisa responder ao aumento.';$('actionNotice').textContent='';$('actionNotice').append(n);$('actionNotice').classList.remove('hidden');addAction('Aceitar','primary',()=>send({t:'ans',a:'aceitar'}));addAction('Aumentar','gold',()=>send({t:'ans',a:'aumentar'}));addAction('Correr','danger',()=>send({t:'ans',a:'recuar'}));}
+    if(h.pend&&h.pend.who===g.me){const n=document.createElement('div');n.className='notice';n.textContent='Você precisa responder ao aumento.';$('actionNotice').textContent='';$('actionNotice').append(n);$('actionNotice').classList.remove('hidden');addAction('Aceitar','primary',()=>send({t:'ans',a:'aceitar'}));addAction('Aumentar','gold',()=>send({t:'ans',a:'aumentar'}));addAction('Correr','danger',()=>send({t:'ans',a:'recuar'}));}
     if(h.stage==='ended'&&s.host===s.me){$('backLobbyBtn').classList.remove('hidden');}else $('backLobbyBtn').classList.add('hidden');
     if(s.phase==='over'){$('backLobbyBtn').classList.toggle('hidden',s.host!==s.me);$('gameInfo').textContent='Partida encerrada. '+(g.ents[g.winner]||'Vencedor')+' venceu!';}else $('gameInfo').textContent='A partida vai até '+g.target+' pontos. Manilha definida pela vira.';
   }
