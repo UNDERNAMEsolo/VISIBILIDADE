@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10251d">
+  <title>Truco Online</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0b1712;--panel:#13251d;--panel2:#1a3026;--line:#315442;--green:#28b36b;--green2:#16794a;--gold:#f2c66d;--red:#ed7777;--text:#f4f7f4;--muted:#a6b8ad}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#183b2c 0,#0b1712 58%);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;min-height:100vh}
+    button,input,select{font:inherit}button{cursor:pointer;border:1px solid var(--line);border-radius:10px;background:#203c2d;color:var(--text);padding:10px 14px;font-weight:650;transition:.15s}button:hover:not(:disabled){filter:brightness(1.18);transform:translateY(-1px)}button:disabled{opacity:.38;cursor:not-allowed}.primary{background:linear-gradient(135deg,#239b5b,#176a43);border-color:#38c77a}.danger{background:#54292b;border-color:#874245}.gold{background:#59451f;border-color:#93733c;color:#ffe5a8}.muted{background:#1a2a22}.small{font-size:12px;padding:7px 10px}.hidden{display:none!important}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px max(18px,calc((100vw - 1200px)/2));border-bottom:1px solid #294536;background:#09140fbb;backdrop-filter:blur(12px);position:sticky;top:0;z-index:5}header h1{font-size:20px;margin:0;letter-spacing:.5px}header h1 span{color:#76d69c}.status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:7px}.dot{width:8px;height:8px;border-radius:50%;background:#d6a34e}.dot.online{background:#35ca7b;box-shadow:0 0 9px #35ca7b}
+    main{max-width:1200px;margin:24px auto;padding:0 16px 50px}.panel{background:linear-gradient(145deg,#172b21,#102018);border:1px solid #294a37;border-radius:16px;padding:18px;box-shadow:0 12px 35px #0003}.panel h2,.panel h3{margin:0 0 14px}.muted-text{color:var(--muted)}.eyebrow{text-transform:uppercase;letter-spacing:1.3px;font-size:10px;font-weight:800;color:#8fbea0}.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.between{justify-content:space-between}.stack{display:grid;gap:14px}.join-wrap{max-width:460px;margin:8vh auto}.join-wrap h2{font-size:25px}.join-wrap p{color:var(--muted);line-height:1.5}.field{display:grid;gap:7px;margin:14px 0}.field label{font-size:12px;color:var(--muted)}input,select{width:100%;border:1px solid var(--line);border-radius:9px;padding:12px;background:#0b1912;color:var(--text);outline:none}input:focus,select:focus{border-color:var(--green)}.join-wrap button{width:100%;margin-top:8px;padding:13px}
+    #lobby{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.players{display:grid;gap:8px}.player{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#0d1c14;border:1px solid #263f30;border-radius:10px;padding:11px}.player .who{display:flex;align-items:center;gap:9px}.avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#26543b;color:#c9f5d8;font-weight:800}.tag{font-size:10px;padding:4px 7px;border-radius:99px;background:#283c30;color:#c6d7cc}.tag.host{background:#59451f;color:#ffe0a0}.tag.off{background:#48292a;color:#f1aaaa}.team-pick{display:flex;gap:8px;margin-top:10px}.team-pick button{flex:1}.team-pick .selected{border-color:#65db91;background:#1a6540}.settings{display:grid;grid-template-columns:1fr 1fr;gap:10px}.settings .field{margin:0}.hint{font-size:12px;color:var(--muted);line-height:1.45}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+    #game{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px}.table-panel{min-height:600px;display:flex;flex-direction:column;gap:14px}.scorebar{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}.score{min-width:130px;text-align:center;padding:10px 16px;border-radius:12px;background:#0b1912;border:1px solid #315542}.score strong{display:block;font-size:27px;color:var(--gold)}.score small{font-size:11px;color:var(--muted)}.arena{position:relative;flex:1;min-height:320px;border:1px solid #35704d;border-radius:150px;background:radial-gradient(ellipse,#246143 0,#185035 55%,#103a27 100%);box-shadow:inset 0 0 35px #061d12,0 10px 22px #0003;display:flex;align-items:center;justify-content:center;padding:32px}.arena:before{content:"";position:absolute;inset:12px;border:1px solid #8bc69a55;border-radius:140px;pointer-events:none}.center-info{z-index:1;text-align:center;max-width:420px}.center-info h3{font-size:20px;margin:0 0 8px}.center-info p{color:#d3e8d8;font-size:13px;margin:5px}.cards-on-table{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:16px}.table-play{display:grid;gap:5px;text-align:center;font-size:11px;color:#d8eadc}.playing-card{width:67px;height:94px;border-radius:8px;background:#f8f5ec;color:#18231c;border:1px solid #d9d2c3;box-shadow:0 4px 9px #0005;display:flex;flex-direction:column;justify-content:space-between;padding:6px;font-weight:800;text-align:left}.playing-card .rank{font-size:20px;line-height:1}.playing-card .suit{font-size:24px;align-self:flex-end;line-height:1}.playing-card.red-suit{color:#cf343b}.playing-card.back{background:repeating-linear-gradient(45deg,#e9eee8,#e9eee8 5px,#31684a 5px,#31684a 10px);border:4px solid #f4f0e5;color:transparent}.players-strip{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.seat{background:#0c1c13;border:1px solid #315340;border-radius:9px;padding:7px 10px;font-size:11px}.seat.active{border-color:#f1c56b;box-shadow:0 0 0 1px #f1c56b55}.seat.dead{opacity:.4;text-decoration:line-through}.hand-area{border-top:1px solid #315340;padding-top:14px}.hand{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.hand button{padding:0;border:0;background:transparent}.hand button:disabled{opacity:.45}.hand button .playing-card{width:82px;height:116px;transition:.15s}.hand button:hover:not(:disabled) .playing-card{transform:translateY(-8px)}.hand button:disabled .playing-card{transform:none}.card-label{display:block;font-size:10px;color:var(--muted);margin-top:5px}.controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}.side{display:grid;align-content:start;gap:14px}.chat-box{height:230px;overflow:auto;background:#09170f;border:1px solid #294735;border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px}.msg{font-size:12px;line-height:1.4;overflow-wrap:anywhere}.msg b{color:#9bdab0}.msg.system{color:#e8c779}.chat-form{display:flex;gap:6px;margin-top:8px}.chat-form input{min-width:0;padding:9px}.chat-form button{padding:8px 11px}.notice{border:1px solid #7c6538;background:#3c321b;color:#ffe5a8;border-radius:10px;padding:11px;font-size:12px;line-height:1.45}.error{border:1px solid #8e4446;background:#422326;color:#ffc5c5;border-radius:9px;padding:10px;font-size:13px;margin:10px 0}.empty{color:#81978a;font-size:13px;text-align:center;padding:20px}.footer-note{text-align:center;color:#71877a;font-size:11px;margin-top:20px}
+    @media(max-width:820px){#lobby,#game{grid-template-columns:1fr}.table-panel{min-height:500px}.arena{border-radius:45px;min-height:280px}.arena:before{border-radius:36px}header{padding:13px 16px}main{margin:16px auto}.side{grid-template-columns:1fr 1fr}.side>.panel:first-child{grid-column:1/-1}}
+    @media(max-width:520px){.side{grid-template-columns:1fr}.side>.panel:first-child{grid-column:auto}.settings{grid-template-columns:1fr}.playing-card{width:56px;height:80px}.hand button .playing-card{width:68px;height:98px}.arena{padding:20px}.score{min-width:110px}.table-panel{min-height:460px}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>♣ <span>TRUCO</span> ONLINE</h1>
+    <div class="status"><i class="dot" id="statusDot"></i><span id="statusText">Desconectado</span></div>
+  </header>
+  <main>
+    <section id="joinScreen" class="join-wrap panel">
+      <div class="eyebrow">Mesa online</div>
+      <h2>Entre para jogar</h2>
+      <p>Escolha um apelido e entre na mesa. Compartilhe o endereço deste site com seus amigos para reunirem todos no mesmo jogo.</p>
+      <div id="joinError" class="error hidden"></div>
+      <form id="joinForm">
+        <div class="field"><label for="playerName">Seu apelido (até 16 caracteres)</label><input id="playerName" maxlength="16" required autocomplete="nickname" placeholder="Ex.: Sergio"></div>
+        <button class="primary" type="submit">Entrar na mesa</button>
+      </form>
+      <p class="hint">Esta versão utiliza uma única mesa por servidor. Para jogar, todos devem acessar o mesmo endereço.</p>
+    </section>
+
+    <section id="lobby" class="hidden">
+      <div class="panel">
+        <div class="row between"><div><div class="eyebrow">Antes da partida</div><h2>Sala de espera</h2></div><span class="tag" id="playerCount">0 jogadores</span></div>
+        <div id="playersList" class="players"></div>
+        <div id="teamChooser" class="hidden">
+          <p class="hint">Escolha seu time. No modo dupla, são necessários 2 jogadores em cada time; no trio, 3 em cada.</p>
+          <div class="team-pick"><button id="team0" type="button">Time 1</button><button id="team1" type="button">Time 2</button><button id="teamNone" class="muted" type="button">Sem time</button></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="eyebrow">Configuração da partida</div><h3>Opções da mesa</h3>
+        <div class="settings">
+          <div class="field"><label for="modeSelect">Modo</label><select id="modeSelect"><option value="dupla">Dupla (4 jogadores)</option><option value="trio">Trio (6 jogadores)</option><option value="solo">Todos contra todos (2–6)</option></select></div>
+          <div class="field"><label for="assignSelect">Distribuição</label><select id="assignSelect"><option value="escolher">Escolher times</option><option value="sorteio">Sortear times</option></select></div>
+        </div>
+        <p id="configHint" class="hint">O anfitrião pode alterar as opções. Os jogadores devem escolher seus times antes de iniciar.</p>
+        <div class="actions"><button id="startBtn" class="primary" type="button">Iniciar partida</button><button id="copyLinkBtn" class="muted" type="button">Copiar link para amigos</button></div>
+        <div id="lobbyError" class="error hidden"></div>
+      </div>
+    </section>
+
+    <section id="game" class="hidden">
+      <div class="panel table-panel">
+        <div class="row between"><div><div class="eyebrow">Partida em andamento</div><h2 id="gameTitle">Truco</h2></div><span class="tag" id="stakeLabel">Vale 1 ponto</span></div>
+        <div class="scorebar" id="scoreBoard"></div>
+        <div class="arena">
+          <div class="center-info"><h3 id="stageTitle">Aguardando...</h3><p id="stageText">As cartas aparecerão aqui.</p><div class="cards-on-table" id="tableCards"></div></div>
+        </div>
+        <div class="players-strip" id="seatStrip"></div>
+        <div id="actionNotice" class="notice hidden"></div>
+        <div class="hand-area"><div class="eyebrow" style="text-align:center;margin-bottom:10px">Suas cartas</div><div class="hand" id="myHand"></div><div id="playControls" class="controls"></div></div>
+      </div>
+      <aside class="side">
+        <div class="panel"><div class="row between"><h3>Chat da mesa</h3><span class="tag">Ao vivo</span></div><div id="chatBox" class="chat-box"></div><form id="chatForm" class="chat-form"><input id="chatInput" maxlength="300" autocomplete="off" placeholder="Digite uma mensagem..."><button class="primary" type="submit">Enviar</button></form></div>
+        <div class="panel"><h3>Informações</h3><div class="hint" id="gameInfo">A partida vai até 12 pontos.</div><div class="actions"><button id="copyGameLink" class="muted small" type="button">Copiar convite</button><button id="backLobbyBtn" class="danger small hidden" type="button">Voltar à sala</button></div></div>
+      </aside>
+    </section>
+    <div class="footer-note">Truco Online · Partidas entre amigos</div>
+  </main>
+<script>
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const storage = { id: 'truco_online_player_id', name: 'truco_online_player_name' };
+  const state = { ws: null, id: localStorage.getItem(storage.id) || makeId(), name: localStorage.getItem(storage.name) || '', snapshot: null, chat: [], reconnect: 0, intentionalClose: false, cover: false };
+  function makeId(){ return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'p-' + Math.random().toString(36).slice(2) + Date.now().toString(36); }
+  function send(obj){ if(state.ws && state.ws.readyState === WebSocket.OPEN) state.ws.send(JSON.stringify(obj)); }
+  function setStatus(ok, text){ $('statusDot').classList.toggle('online',ok); $('statusText').textContent=text; }
+  function showError(id, msg){ const el=$(id); el.textContent=msg; el.classList.remove('hidden'); }
+  function clearError(id){ $(id).textContent=''; $(id).classList.add('hidden'); }
+  function connect(name){
+    state.name = name.trim().slice(0,16); if(!state.name) return;
+    localStorage.setItem(storage.id,state.id); localStorage.setItem(storage.name,state.name);
+    $('joinScreen').classList.add('hidden'); setStatus(false,'Conectando...');
+    const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+    let ws; try { ws = new WebSocket(proto + '//' + location.host); } catch(e){ setStatus(false,'Falha na conexão'); $('joinScreen').classList.remove('hidden'); showError('joinError','Não foi possível abrir a conexão. Confira o endereço do jogo.'); return; }
+    state.ws=ws;
+    ws.addEventListener('open',()=>{ state.reconnect=0; setStatus(true,'Conectado'); send({t:'join',id:state.id,name:state.name}); });
+    ws.addEventListener('message',ev=>{ let m; try{m=JSON.parse(ev.data)}catch(e){return;} handleMessage(m); });
+    ws.addEventListener('close',()=>{ setStatus(false,'Conexão perdida'); if(!state.intentionalClose){ $('joinScreen').classList.remove('hidden'); if(state.snapshot){ $('joinScreen').classList.add('hidden'); } scheduleReconnect(); } });
+    ws.addEventListener('error',()=>setStatus(false,'Erro de conexão'));
+  }
+  function scheduleReconnect(){ if(state.reconnect) return; state.reconnect=setTimeout(()=>{state.reconnect=0;if(state.name)connect(state.name)},3000); }
+  function handleMessage(m){
+    if(m.t==='hello'){state.id=m.id;state.name=m.name;localStorage.setItem(storage.id,state.id);localStorage.setItem(storage.name,state.name);}
+    if(m.t==='err'){ const target=$('joinScreen').classList.contains('hidden')?'lobbyError':'joinError'; showError(target,m.x||'Ocorreu um erro.'); return; }
+    if(m.t==='hist'){state.chat=m.chat||[];renderChat();return;}
+    if(m.t==='chat'){state.chat.push(m.m);if(state.chat.length>200)state.chat.shift();renderChat();return;}
+    if(m.t==='st'){state.snapshot=m;render();}
+  }
+  function render(){
+    const s=state.snapshot;if(!s)return;
+    $('joinScreen').classList.add('hidden'); $('lobby').classList.toggle('hidden',s.phase!=='lobby'); $('game').classList.toggle('hidden',s.phase==='lobby');
+    if(s.phase==='lobby')renderLobby(s);else renderGame(s);
+  }
+  function renderLobby(s){
+    const me=s.lobby.find(p=>p.id===s.me); $('playerCount').textContent=s.lobby.length+' jogador(es)';
+    $('playersList').innerHTML='';
+    s.lobby.forEach((p,i)=>{const item=document.createElement('div');item.className='player';const who=document.createElement('div');who.className='who';const avatar=document.createElement('span');avatar.className='avatar';avatar.textContent=(p.name||'?').slice(0,1).toUpperCase();const name=document.createElement('strong');name.textContent=p.name+(p.id===s.me?' (você)':'');who.append(avatar,name);const tags=document.createElement('div');tags.className='row';if(p.id===s.host)tags.append(makeTag('Anfitrião','host'));if(p.team!==null)tags.append(makeTag('Time '+(p.team+1)));tags.append(makeTag(p.on?'Online':'Offline',p.on?'':'off'));item.append(who,tags);$('playersList').append(item);});
+    const isHost=s.host===s.me, teamMode=s.cfg.mode!=='solo';
+    $('modeSelect').value=s.cfg.mode;$('assignSelect').value=s.cfg.assign;$('modeSelect').disabled=!isHost;$('assignSelect').disabled=!isHost;
+    $('startBtn').classList.toggle('hidden',!isHost);$('teamChooser').classList.toggle('hidden',!teamMode);
+    $('team0').classList.toggle('selected',me&&me.team===0);$('team1').classList.toggle('selected',me&&me.team===1);
+    $('teamNone').classList.toggle('selected',me&&me.team===null);
+    $('configHint').textContent=isHost?'Você é o anfitrião e pode configurar/iniciar a partida.':'Aguardando o anfitrião configurar e iniciar a partida.';
+    clearError('lobbyError');
+  }
+  function makeTag(text,kind=''){const x=document.createElement('span');x.className='tag '+kind;x.textContent=text;return x;}
+  function renderGame(s){
+    const g=s.g,h=g&&g.h;if(!g||!h)return;
+    $('gameTitle').textContent=h.kind==='ferro'?'Mão de ferro':h.kind==='onze'?'Mão de onze':'Truco';
+    $('stakeLabel').textContent='Vale '+h.stake+' ponto(s)';
+    $('scoreBoard').innerHTML='';g.score.forEach((v,i)=>{const box=document.createElement('div');box.className='score';const label=document.createElement('small');label.textContent=g.ents[i];const pts=document.createElement('strong');pts.textContent=v;const max=document.createElement('small');max.textContent='de '+g.target;box.append(label,pts,max);$('scoreBoard').append(box);});
+    $('seatStrip').innerHTML='';g.seats.forEach((p,i)=>{const x=document.createElement('span');x.className='seat'+(h.turn===i&&h.stage==='play'?' active':'')+(!p.alive?' dead':'');x.textContent=p.name+(i===g.me?' (você)':'')+(p.on?'':' · caiu');$('seatStrip').append(x);});
+    const stage=$('stageTitle'),desc=$('stageText');
+    const stageLabels={cut:'Corte o baralho',decide:'Decisão da mão de 11',play:'Sua vez de jogar',resolving:'Resolvendo a vaza...',ended:'Fim da mão'};
+    stage.textContent=stageLabels[h.stage]||'Partida';
+    if(h.stage==='cut')desc.textContent=h.cutter===g.me?'Você é o cortador. Escolha a posição do corte abaixo.':'Aguardando '+(g.seats[h.cutter]?.name||'jogador')+' cortar o baralho.';
+    else if(h.stage==='decide')desc.textContent='O time com 11 pontos precisa decidir se joga a mão valendo 3 ou recua.';
+    else if(h.pending)desc.textContent='Pedido de aumento para '+h.pend.value+' pontos. Aguardando resposta.';
+    else if(h.stage==='play')desc.textContent=h.turn===g.me?'É sua vez! Escolha uma carta.':'Aguardando '+(g.seats[h.turn]?.name||'jogador')+' jogar.';
+    else if(h.stage==='ended')desc.textContent=h.res||'Mão encerrada.';
+    else desc.textContent='Aguarde a conclusão da jogada.';
+    $('tableCards').innerHTML='';
+    if(h.vira){$('tableCards').append(makePlayedCard(h.vira,'VIRA'));}
+    h.table.forEach(t=>{$('tableCards').append(makePlayedCard(t.card,t.cov?'Escondida':g.seats[t.seat]?.name||'Jogador'));});
+    $('myHand').innerHTML='';const my=h.my||[];const canPlay=h.stage==='play'&&h.turn===g.me&&!h.pending;
+    my.forEach((c,i)=>{const b=document.createElement('button');b.type='button';b.disabled=!canPlay;const card=c?cardElement(c):cardBack(i);b.append(card);const label=document.createElement('span');label.className='card-label';label.textContent=c?(canPlay?'Jogar':'Carta '+(i+1)):'Carta '+(i+1)+' · às cegas';b.append(label);b.addEventListener('click',()=>send({t:'play',i,cov:state.cover}));$('myHand').append(b);});
+    $('playControls').innerHTML='';$('actionNotice').classList.add('hidden');
+    if(h.stage==='cut'&&h.cutter===g.me){const wrap=document.createElement('div');wrap.className='row';const range=document.createElement('input');range.type='range';range.min='1';range.max='39';range.value='20';range.style.width='150px';const val=document.createElement('span');val.textContent='20';range.addEventListener('input',()=>val.textContent=range.value);const b=document.createElement('button');b.className='primary';b.textContent='Confirmar corte';b.onclick=()=>send({t:'cut',pos:+range.value});wrap.append(range,val,b);$('playControls').append(wrap);}
+    if(h.stage==='decide'&&g.me>=0&&((g.team&&g.me%2===h.onze)||(!g.team&&g.me===h.onze))){addAction('Jogar valendo 3','primary',()=>send({t:'decide',play:true}));addAction('Recuar','danger',()=>send({t:'decide',play:false}));}
+    if(h.stage==='play'&&h.turn===g.me&&!h.pending&&h.kind!=='ferro'&&h.vazas.length>0){const b=document.createElement('button');b.className=state.cover?'gold':'muted';b.textContent=state.cover?'Carta escondida: ligada':'Carta escondida: desligada';b.onclick=()=>{state.cover=!state.cover;renderGame(s)};$('playControls').append(b);}
+    if(h.can){addAction('Pedir truco / aumentar','gold',()=>send({t:'raise'}));}
+    if(h.pending&&h.pend.who===g.me){const n=document.createElement('div');n.className='notice';n.textContent='Você precisa responder ao aumento.';$('actionNotice').textContent='';$('actionNotice').append(n);$('actionNotice').classList.remove('hidden');addAction('Aceitar','primary',()=>send({t:'ans',a:'aceitar'}));addAction('Aumentar','gold',()=>send({t:'ans',a:'aumentar'}));addAction('Correr','danger',()=>send({t:'ans',a:'recuar'}));}
+    if(h.stage==='ended'&&s.host===s.me){$('backLobbyBtn').classList.remove('hidden');}else $('backLobbyBtn').classList.add('hidden');
+    if(s.phase==='over'){$('backLobbyBtn').classList.toggle('hidden',s.host!==s.me);$('gameInfo').textContent='Partida encerrada. '+(g.ents[g.winner]||'Vencedor')+' venceu!';}else $('gameInfo').textContent='A partida vai até '+g.target+' pontos. Manilha definida pela vira.';
+  }
+  function addAction(label,cls,fn){const b=document.createElement('button');b.type='button';b.className=cls;b.textContent=label;b.onclick=fn;$('playControls').append(b);}
+  function cardElement(c){const d=document.createElement('div');d.className='playing-card '+('♦♥'.includes(c.s)?'red-suit':'');const r=document.createElement('span');r.className='rank';r.textContent=c.r;const s=document.createElement('span');s.className='suit';s.textContent=c.s;d.append(r,s);return d;}
+  function cardBack(i){const d=document.createElement('div');d.className='playing-card back';const r=document.createElement('span');r.className='rank';r.textContent='?';d.append(r);return d;}
+  function makePlayedCard(c,label){const wrap=document.createElement('div');wrap.className='table-play';wrap.append(c?cardElement(c):cardBack(0));const txt=document.createElement('span');txt.textContent=label;wrap.append(txt);return wrap;}
+  function renderChat(){const box=$('chatBox');if(!box)return;box.innerHTML='';state.chat.slice(-100).forEach(m=>{const d=document.createElement('div');d.className='msg'+(m.sys?' system':'');if(m.sys)d.textContent=m.x;else{const b=document.createElement('b');b.textContent=(m.n||'Jogador')+': ';d.append(b,document.createTextNode(m.x||''));}box.append(d);});box.scrollTop=box.scrollHeight;}
+  $('joinForm').addEventListener('submit',e=>{e.preventDefault();clearError('joinError');connect($('playerName').value);});
+  $('modeSelect').addEventListener('change',e=>send({t:'cfg',mode:e.target.value}));
+  $('assignSelect').addEventListener('change',e=>send({t:'cfg',assign:e.target.value}));
+  $('team0').addEventListener('click',()=>send({t:'team',team:0}));$('team1').addEventListener('click',()=>send({t:'team',team:1}));$('teamNone').addEventListener('click',()=>send({t:'team',team:null}));
+  $('startBtn').addEventListener('click',()=>{clearError('lobbyError');send({t:'start'});});
+  $('chatForm').addEventListener('submit',e=>{e.preventDefault();const x=$('chatInput').value.trim();if(x){send({t:'chat',x});$('chatInput').value='';}});
+  function copyInvite(){navigator.clipboard?.writeText(location.href).then(()=>alert('Link copiado!')).catch(()=>prompt('Copie o link da mesa:',location.href));}
+  $('copyLinkBtn').addEventListener('click',copyInvite);$('copyGameLink').addEventListener('click',copyInvite);
+  $('backLobbyBtn').addEventListener('click',()=>send({t:'quit'}));
+  $('playerName').value=state.name;
+  if(state.name) connect(state.name);
+})();
+</script>
+</body>
+</html>

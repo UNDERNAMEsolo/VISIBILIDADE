@@ -1,0 +1,13 @@
+{
+  "name": "truco-online",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Jogo de Truco multiplayer online",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
